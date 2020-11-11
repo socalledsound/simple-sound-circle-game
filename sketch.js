@@ -1,10 +1,15 @@
 const socket = io.connect();
-let env, osc;
+
 socket.on('connect', () => {
     console.log('client connected')
 })
 
+
+let env, osc;
 let myCircle;
+
+
+
 
 function setup(){
     createCanvas(600, 600);
@@ -15,11 +20,21 @@ function setup(){
     osc.amp(0);
 
 
-    myCircle = new SoundCircle(width/2, height/2);
+    const myCircleOpts = {
+        x: random(50, width-50),
+        y: random(50, height-50),
+        size: random(20,40),
+        col: [random(255), random(255), random(255)],
+    }
+
+
+    myCircle = new SoundCircle(socket.id, myCircleOpts.x, myCircleOpts.y, myCircleOpts.size, myCircleOpts.col);
 }
 
 function draw(){
     background(120,90,200);
+
+
     myCircle.move();
     myCircle.checkEdges();
     myCircle.display();
@@ -27,10 +42,19 @@ function draw(){
 
 
 function mousePressed(){
-    myCircle.checkClick(mouseX, mouseY);
+    const playSound = myCircle.checkClick(mouseX, mouseY);
+    if(playSound){
+        const freq = myCircle.size * 10;
+        playSound(freq);
+    }
 }
 
 function mouseReleased(){
     myCircle.clicked = false;
     myCircle.setSpeed(mouseX, mouseY);
+}
+
+function playSound(freq){
+    osc.freq(freq);
+    env.play(osc);
 }
