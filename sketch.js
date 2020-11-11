@@ -1,3 +1,9 @@
+const socket = io.connect();
+
+socket.on('connect', () => {
+    console.log('client connected')
+})
+
 let myCircle;
 
 function setup(){
