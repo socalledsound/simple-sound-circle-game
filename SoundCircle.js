@@ -18,8 +18,9 @@ class SoundCircle {
         if(distMouse < this.size){
             this.clicked = true;
             this.increaseSize();
+            return true
         }
-    return true
+  
     }
 
     checkEdges(){
