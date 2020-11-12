@@ -1,5 +1,5 @@
 class SoundCircle {
-    constructor(x, y){
+    constructor(id, x, y, size, col){
         this.pos = createVector(x, y);
         this.velocity = createVector(0, 0);
         this.acceleration = createVector(0, 0);
@@ -19,6 +19,7 @@ class SoundCircle {
             this.clicked = true;
             this.increaseSize();
         }
+    return true
     }
 
     checkEdges(){

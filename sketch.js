@@ -1,8 +1,8 @@
-const socket = io.connect();
+// const socket = io.connect();
 
-socket.on('connect', () => {
-    console.log('client connected')
-})
+// socket.on('connect', () => {
+//     console.log('client connected')
+// })
 
 
 let env, osc;
@@ -20,15 +20,22 @@ function setup(){
     osc.amp(0);
 
 
+    // const myCircleOpts = {
+    //     x: random(150, width-150),
+    //     y: random(150, height-150),
+    //     size: random(20,40),
+    //     col: [random(255), random(255), random(255)],
+    // }
+
     const myCircleOpts = {
-        x: random(50, width-50),
-        y: random(50, height-50),
+        x: 100,
+        y: random(150, height-150),
         size: random(20,40),
         col: [random(255), random(255), random(255)],
     }
 
 
-    myCircle = new SoundCircle(socket.id, myCircleOpts.x, myCircleOpts.y, myCircleOpts.size, myCircleOpts.col);
+    myCircle = new SoundCircle(1, myCircleOpts.x, myCircleOpts.y, myCircleOpts.size, myCircleOpts.col);
 }
 
 function draw(){
@@ -40,21 +47,26 @@ function draw(){
     myCircle.display();
 }
 
+const playSound = (freq) => {
+    console.log('playing sound');
+
+}
 
 function mousePressed(){
     const playSound = myCircle.checkClick(mouseX, mouseY);
     if(playSound){
+        console.log(playSound);
         const freq = myCircle.size * 10;
-        playSound(freq);
+        osc.freq(freq);
+        env.play(osc);
     }
 }
 
 function mouseReleased(){
+    if(myCircle.clicked){
+        myCircle.setSpeed(mouseX, mouseY);
+    }  
     myCircle.clicked = false;
-    myCircle.setSpeed(mouseX, mouseY);
 }
 
-function playSound(freq){
-    osc.freq(freq);
-    env.play(osc);
-}
+
